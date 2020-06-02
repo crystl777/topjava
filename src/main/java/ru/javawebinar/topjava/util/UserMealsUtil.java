@@ -29,7 +29,7 @@ public class UserMealsUtil {
         Map<LocalDate, Integer> caloriesSumPerDate = new HashMap<>();
         for (UserMeal meal : meals) {
             LocalDate mealDate = meal.getDateTime().toLocalDate();
-            caloriesSumPerDate.put(mealDate, caloriesSumPerDate.merge(mealDate, meal.getCalories(), Integer::sum));
+            caloriesSumPerDate.merge(mealDate, meal.getCalories(), Integer::sum);
         }
 
         List<UserMealWithExcess> mealWithExcesses = new ArrayList<>();
@@ -47,10 +47,11 @@ public class UserMealsUtil {
         Map<LocalDate, Integer> caloriesSumPerDate = meals.stream()
                 .collect(Collectors.toMap(meal -> meal.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
 
-        return meals.stream().filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
-                .map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(),
-                        userMeal.getCalories(),
-                        caloriesSumPerDate.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
+        return meals.stream()
+                .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .map(meal -> new UserMealWithExcess(meal.getDateTime(), meal.getDescription(),
+                        meal.getCalories(),
+                        caloriesSumPerDate.get(meal.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
 }
