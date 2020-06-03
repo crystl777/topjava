@@ -63,22 +63,22 @@ public class UserMealsUtil {
         List<UserMealWithExcess> mealsWithExcesses = new ArrayList<>();
         Map<LocalDate, Integer> caloriesSumPerDate = new HashMap<>();
         int index = 0;
-        int size = meals.size();
-        recursiveCalculationSumCalories(meals, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, index, size, caloriesPerDay);
+        recursiveCalculationSumCalories(meals, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, index, caloriesPerDay);
         return mealsWithExcesses;
     }
 
     private static void recursiveCalculationSumCalories(List<UserMeal> meals, LocalTime startTime, LocalTime endTime,
                                                         List<UserMealWithExcess> mealsWithExcesses, Map<LocalDate, Integer> caloriesSumPerDate,
-                                                        int index, int size, int caloriesPerDay) {
-        if (index < size) {
-            UserMeal meal = meals.get(index);
-            LocalDateTime localDateTime = meal.getDateTime();
-            LocalDate mealDate = meal.getDateTime().toLocalDate();
-            caloriesSumPerDate.merge(mealDate, meals.get(index).getCalories(), Integer::sum);
-            recursiveCalculationSumCalories(meals, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, index + 1, size, caloriesPerDay);
-            addMealsWithExcess(meal, localDateTime, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, caloriesPerDay);
+                                                        int index, int caloriesPerDay) {
+        if (index >= meals.size()) {
+            return;
         }
+        UserMeal meal = meals.get(index);
+        LocalDateTime localDateTime = meal.getDateTime();
+        caloriesSumPerDate.merge(localDateTime.toLocalDate(), meal.getCalories(), Integer::sum);
+        recursiveCalculationSumCalories(meals, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, index + 1, caloriesPerDay);
+        addMealsWithExcess(meal, localDateTime, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, caloriesPerDay);
+
     }
 
     private static void addMealsWithExcess(UserMeal meal, LocalDateTime localDateTime, LocalTime startTime, LocalTime endTime,
