@@ -78,7 +78,6 @@ public class UserMealsUtil {
         caloriesSumPerDate.merge(localDateTime.toLocalDate(), meal.getCalories(), Integer::sum);
         recursiveCalculationSumCalories(meals, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, index + 1, caloriesPerDay);
         addMealsWithExcess(meal, localDateTime, startTime, endTime, mealsWithExcesses, caloriesSumPerDate, caloriesPerDay);
-
     }
 
     private static void addMealsWithExcess(UserMeal meal, LocalDateTime localDateTime, LocalTime startTime, LocalTime endTime,
