@@ -22,10 +22,10 @@
             <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
             <c:set var="excess" value="${meal.excess}"></c:set>
             <tr style="background-color:${excess ? 'greenyellow' : 'red'}">
-            <td align="center"><javatime:format pattern="dd-MM-yyyy HH:mm" value="${meal.dateTime}"/></td>
-            <td align="center">${meal.description}</td>
-            <td align="center">${meal.calories}</td>
-            <td align="center">${excess}</td>
+                <td align="center"><javatime:format pattern="dd-MM-yyyy HH:mm" value="${meal.dateTime}"/></td>
+                <td align="center">${meal.description}</td>
+                <td align="center">${meal.calories}</td>
+                <td align="center">${excess}</td>
             </tr>
         </c:forEach>
     </table>
