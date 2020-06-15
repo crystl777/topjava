@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -36,19 +37,23 @@ public class InMemoryMealRepository implements MealRepository {
             repository.put(userId, meal);
             return meal;
         }
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        //return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        throw new NotFoundException(userId.toString() + " is not your ID");
     }
 
+    //toDo добавить NotFoundException
     @Override
     public boolean delete(int id) {
         return repository.remove(id) != null;
     }
 
+    //toDo добавить NotFoundException
     @Override
     public Meal get(int id) {
         return repository.get(id);
     }
 
+    //tODo список еды возвращать отсортированный в обратном порядке по датам
     @Override
     public Collection<Meal> getAll() {
         return repository.values();
