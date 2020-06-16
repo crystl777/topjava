@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -37,27 +38,22 @@ public class InMemoryMealRepository implements MealRepository {
             repository.put(userId, meal);
             return meal;
         }
-        //return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
-        throw new NotFoundException(userId.toString() + " is not your ID");
+           throw new NotFoundException(userId.toString() + " is not your ID");
     }
 
-    //toDo добавить NotFoundException
     @Override
     public boolean delete(int id) {
         return repository.remove(id) != null;
     }
 
-    //toDo добавить NotFoundException
     @Override
     public Meal get(int id) {
         return repository.get(id);
     }
 
-    //tODo список еды возвращать отсортированный в обратном порядке по датам
     @Override
     public Collection<Meal> getAll() {
-        return repository.values();
+      return   repository.values().stream().sorted(Meal::compareTo).collect(Collectors.toList());
     }
-
 }
 

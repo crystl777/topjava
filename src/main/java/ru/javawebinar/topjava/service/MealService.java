@@ -13,26 +13,29 @@ public class MealService {
 
     private final MealRepository repository;
 
-    public MealService(MealRepository repository) {this.repository = repository;}
+    public MealService(MealRepository repository) {
+        this.repository = repository;
+    }
 
     public Meal create(Meal meal, Integer userId) {
         return repository.save(meal, userId);
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.get(id).getUserId().equals(id) && repository.delete(id), id);
     }
 
     public Meal get(int id) {
-        return checkNotFoundWithId(repository.get(id), id);
+        checkNotFoundWithId(repository.get(id).getUserId().equals(id), id);
+        return repository.get(id);
     }
 
     public Collection<Meal> getAll() {
         return repository.getAll();
     }
 
-    public void update(Meal meal, Integer userId) {
-        checkNotFoundWithId(repository.save(meal, userId),meal.getId());
+    public void update(Meal meal, int userId) {
+        checkNotFoundWithId(meal.getUserId().equals(userId), meal.getId());
+        repository.save(meal, userId);
     }
-
 }
