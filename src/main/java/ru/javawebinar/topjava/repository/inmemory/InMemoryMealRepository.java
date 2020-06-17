@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -53,7 +54,9 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Collection<Meal> getAll() {
-      return   repository.values().stream().sorted(Meal::compareTo).collect(Collectors.toList());
+      return   repository.values().stream()
+              .sorted(Comparator.comparing(Meal::getDateTime))
+              .collect(Collectors.toList());
     }
 }
 
