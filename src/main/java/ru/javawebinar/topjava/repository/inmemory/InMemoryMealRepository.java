@@ -3,11 +3,12 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.Collection;
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,12 +21,12 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         save(MealsUtil.MEALS.get(0), 1);
-        save(MealsUtil.MEALS.get(1), 2);
-        save(MealsUtil.MEALS.get(2), 3);
-        save(MealsUtil.MEALS.get(3), 4);
-        save(MealsUtil.MEALS.get(4), 5);
-        save(MealsUtil.MEALS.get(5), 6);
-        save(MealsUtil.MEALS.get(6), 7);
+        save(MealsUtil.MEALS.get(1), 1);
+        save(MealsUtil.MEALS.get(2), 1);
+        save(MealsUtil.MEALS.get(3), 2);
+        save(MealsUtil.MEALS.get(4), 2);
+        save(MealsUtil.MEALS.get(5), 2);
+        save(MealsUtil.MEALS.get(6), 2);
     }
 
     @Override
@@ -35,28 +36,46 @@ public class InMemoryMealRepository implements MealRepository {
             meal.setUserId(userId);
             repository.put(userId, meal);
             return meal;
-        } else if (userId.equals(meal.getUserId())) {
-            repository.put(userId, meal);
-            return meal;
+        } else if (checkUserMeal(repository.get(meal.getId()).getUserId(), userId)) {
+            return repository.computeIfPresent(meal.getId(), (key, value) -> meal);
         }
-           throw new NotFoundException(userId.toString() + " is not your ID");
+        return null;
     }
 
     @Override
-    public boolean delete(int id) {
-        return repository.remove(id) != null;
+    public boolean delete(Integer id, Integer userId) {
+        if (checkUserMeal(id, userId)) {
+            return repository.remove(id) != null;
+        }
+        return false;
     }
 
     @Override
-    public Meal get(int id) {
-        return repository.get(id);
+    public Meal get(Integer id, Integer userId) {
+        if (checkUserMeal(id, userId)) {
+            return repository.get(id);
+        }
+        return null;
     }
 
     @Override
-    public Collection<Meal> getAll() {
-      return   repository.values().stream()
-              .sorted(Comparator.comparing(Meal::getDateTime))
-              .collect(Collectors.toList());
+    public List<Meal> getAll(Integer userId) {
+        return repository.values().stream()
+                .filter(meal -> meal.getUserId().equals(userId))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public List<Meal> getAllByDate(Integer userId, LocalDate startDate, LocalDate endDate) {
+        return repository.values().stream()
+                .filter(meal -> meal.getUserId().equals(userId))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .filter(meal -> DateTimeUtil.isBetweenInInclusive(meal.getDate(), startDate, endDate))
+                .collect(Collectors.toList());
+    }
+
+    private boolean checkUserMeal(Integer mealUserId, Integer userId) {
+        return mealUserId.equals(userId);
     }
 }
 
