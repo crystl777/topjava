@@ -34,9 +34,9 @@ public class InMemoryMealRepository implements MealRepository {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userId);
-            repository.put(userId, meal);
+            repository.put(meal.getId(), meal);
             return meal;
-        } else if (checkUserMeal(repository.get(meal.getId()).getUserId(), userId)) {
+        } else if (repository.containsValue(meal) && meal.getUserId().equals(userId)) {
             return repository.computeIfPresent(meal.getId(), (key, value) -> meal);
         }
         return null;
@@ -44,7 +44,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public boolean delete(Integer id, Integer userId) {
-        if (checkUserMeal(id, userId)) {
+        if (repository.containsKey(userId) && repository.get(id).getUserId().equals(userId)) {
             return repository.remove(id) != null;
         }
         return false;
@@ -52,7 +52,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal get(Integer id, Integer userId) {
-        if (checkUserMeal(id, userId)) {
+        if (repository.containsKey(userId) && repository.get(id).getUserId().equals(userId)) {
             return repository.get(id);
         }
         return null;
@@ -69,13 +69,9 @@ public class InMemoryMealRepository implements MealRepository {
     public List<Meal> getAllByDate(Integer userId, LocalDate startDate, LocalDate endDate) {
         return repository.values().stream()
                 .filter(meal -> meal.getUserId().equals(userId))
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .filter(meal -> DateTimeUtil.isBetweenInInclusive(meal.getDate(), startDate, endDate))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
-    }
-
-    private boolean checkUserMeal(Integer mealUserId, Integer userId) {
-        return mealUserId.equals(userId);
     }
 }
 

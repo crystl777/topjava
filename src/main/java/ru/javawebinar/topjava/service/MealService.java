@@ -22,7 +22,7 @@ public class MealService {
         return repository.save(meal, userId);
     }
 
-    public void delete(Integer id, Integer userId) {
+    public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
@@ -30,7 +30,7 @@ public class MealService {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public List<Meal> getAll(Integer userId) {
+    public List<Meal> getAll(int userId) {
         return repository.getAll(userId);
     }
 
