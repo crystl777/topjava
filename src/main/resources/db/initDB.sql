@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS meals;
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
 
@@ -23,3 +24,26 @@ CREATE TABLE user_roles
   CONSTRAINT user_roles_idx UNIQUE (user_id, role),
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+create table meals
+(
+    id integer default nextval('global_seq'::regclass) not null
+        constraint meals_pk
+            primary key,
+    date_time timestamp not null,
+    calories integer not null,
+    user_id integer not null
+        constraint meals_users_id_fk
+            references users
+            on delete cascade,
+    description varchar not null
+);
+
+alter table meals owner to "user";
+
+create unique index meals_id_uindex
+    on meals (id);
+
+
+
+
