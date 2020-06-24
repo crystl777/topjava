@@ -21,13 +21,18 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal get(int id, int userId) {
-        return checkNotFoundWithId(repository.get(id, userId), id);
+    public Meal create(Meal meal, int userId) {
+        return repository.save(meal, userId);
     }
 
     public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
+
+    public Meal get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
+    }
+
 
     public List<Meal> getBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
         return repository.getBetweenHalfOpen(atStartOfDayOrMin(startDate), atStartOfNextDayOrMax(endDate), userId);
@@ -41,7 +46,4 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public Meal create(Meal meal, int userId) {
-        return repository.save(meal, userId);
-    }
 }
