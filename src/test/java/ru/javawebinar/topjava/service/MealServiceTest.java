@@ -13,6 +13,8 @@ import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.util.List;
+
 import static ru.javawebinar.topjava.MealTestData.MEAL;
 import static ru.javawebinar.topjava.MealTestData.MEAL_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -66,9 +68,10 @@ public class MealServiceTest extends TestCase {
         MealTestData.assertMatch(service.get(MEAL_ID, USER_ID), updated);
     }
 
+    @Test
     public void getAll() {
-    //    List<Meal> all = service.getAll(USER_ID);
-    //    MealTestData.assertMatch(all);
+        List<Meal> all = service.getAll(USER_ID);
+        MealTestData.assertMatch(all);
     }
 
     public void testGetBetweenInclusive() {
