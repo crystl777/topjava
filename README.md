@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/290110fd8ea74715a52beb35733ea7e0)](https://www.codacy.com/manual/crystl777/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=crystl777/topjava&amp;utm_campaign=Badge_Grade)
-https://travis-ci.org/crystl777/topjava.svg?branch=master
+[![Build Status](https://travis-ci.org/crystl777/topjava.svg?branch=master)](https://travis-ci.org/crystl777/topjava)
 
 Java Enterprise Online Project 
 ===============================
