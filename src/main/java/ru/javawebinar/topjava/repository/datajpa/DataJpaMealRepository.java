@@ -10,17 +10,17 @@ import java.util.List;
 @Repository
 public class DataJpaMealRepository implements MealRepository {
 
-    private CrudMealRepository crudMealRepository;
-    private DataJpaUserRepository dataJpaUserRepository;
+    private final CrudMealRepository crudMealRepository;
+    private final CrudUserRepository crudUserRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudMealRepository, DataJpaUserRepository dataJpaUserRepository) {
+    public DataJpaMealRepository(CrudMealRepository crudMealRepository, CrudUserRepository crudUserRepository) {
         this.crudMealRepository = crudMealRepository;
-        this.dataJpaUserRepository = dataJpaUserRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        meal.setUser(dataJpaUserRepository.get(userId));
+        meal.setUser(crudUserRepository.getOne(userId));
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
         }
