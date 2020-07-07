@@ -10,34 +10,40 @@ import java.util.List;
 @Repository
 public class DataJpaMealRepository implements MealRepository {
 
-    private final CrudMealRepository crudRepository;
+    private CrudMealRepository crudMealRepository;
+    private DataJpaUserRepository dataJpaUserRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
-        this.crudRepository = crudRepository;
+    public DataJpaMealRepository(CrudMealRepository crudMealRepository, DataJpaUserRepository dataJpaUserRepository) {
+        this.crudMealRepository = crudMealRepository;
+        this.dataJpaUserRepository = dataJpaUserRepository;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        return null;
+        meal.setUser(dataJpaUserRepository.get(userId));
+        if (!meal.isNew() && get(meal.getId(), userId) == null) {
+            return null;
+        }
+        return crudMealRepository.save(meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return false;
+        return crudMealRepository.delete(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+        return crudMealRepository.get(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return null;
+        return crudMealRepository.getAll(userId);
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return null;
+        return crudMealRepository.getSorted(userId, startDateTime, endDateTime);
     }
 }
