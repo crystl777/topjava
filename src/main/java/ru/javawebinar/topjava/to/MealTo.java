@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.to;
 
+import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
