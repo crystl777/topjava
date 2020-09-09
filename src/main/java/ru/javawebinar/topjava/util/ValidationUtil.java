@@ -35,9 +35,9 @@ public class ValidationUtil {
         checkNotFound(object != null, msg);
         return object;
     }
-    public static void checkNotFound(boolean found, String msg) {
+    public static void checkNotFound(boolean found, String arg) {
         if (!found) {
-            throw new NotFoundException("Not found entity with " + msg);
+            throw new NotFoundException(arg);
         }
     }
     public static void checkNew(HasId bean) {
