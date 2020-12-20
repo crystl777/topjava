@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a0974dc3617f4a838d0ebe4b161c903e)](https://app.codacy.com/gh/crystl777/topjava?utm_source=github.com&utm_medium=referral&utm_content=crystl777/topjava&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/290110fd8ea74715a52beb35733ea7e0)](https://www.codacy.com/manual/crystl777/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=crystl777/topjava&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/crystl777/topjava.svg?branch=master)](https://travis-ci.org/crystl777/topjava)
 
